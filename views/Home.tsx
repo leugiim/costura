@@ -1,39 +1,49 @@
 import 'react-native-gesture-handler';
-import React from 'react';
-import { Text } from 'react-native'
+import React, { useEffect } from 'react';
+import { Text, View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Appbar, Button, Card, Title, Paragraph, Avatar } from 'react-native-paper';
+import { useUsersStore } from "./../stores"
+import styles from "./../styles"
 
 
 export default function Home ({ navigation }) {
     const _handleMore = () => console.log('Shown more');
-    const LeftContent = (props: object) => <Avatar.Icon {...props} icon="folder" />
+    const user = useUsersStore(store => store.user);
+    const getUser = useUsersStore(store => store.getUser);
+    useEffect(() => {
+        (async function(){
+            await getUser(1);
+        })(); 
+    }, []);
+    
     return (
         <SafeAreaView>
-            <div style={{marginBottom: "30px"}}>
+            <View style={styles.mb_3}>
                 <Appbar.Header>
                     <Appbar.Content title="Home" subtitle="Home Subtitle" />
                     <Appbar.Action icon="information" onPress={() => navigation.navigate('About')}></Appbar.Action>
                     <Appbar.Action icon="dots-vertical" onPress={_handleMore} />
                 </Appbar.Header>
-            </div>
+            </View>
 
-            <div style={{margin: "0 20px"}}>
-            <Button icon="home" mode="contained" onPress={() => navigation.navigate('About')}>About</Button>
-                    
-            <Card style={{marginTop: "20px"}}>
-                <Card.Title title="Card Title" subtitle="Card Subtitle" left={LeftContent} />
-                <Card.Content>
-                    <Title>Card title</Title>
-                    <Paragraph>Card content</Paragraph>
-                </Card.Content>
-                <Card.Cover source={{ uri: 'https://picsum.photos/700' }} />
-                <Card.Actions>
-                    <Button>Cancel</Button>
-                    <Button>Ok</Button>
-                </Card.Actions>
-            </Card>
-            </div>
+            <View style={[styles.mx_4]}>
+                <Text>Test</Text>
+                <Button icon="home" mode="contained" onPress={() => navigation.navigate('About')}>About</Button>
+                        
+                <Card style={styles.mt_4}>
+                    { (user) && <Card.Title title={user?.Name} subtitle={user?.LastName} left={(props) => <Avatar.Image {...props} size={48} source={{ uri: user?.Image }} />} /> }
+                    {/* <Card.Content>
+                        <Title>Card title</Title>
+                        <Paragraph>{user?.Name}</Paragraph>
+                    </Card.Content> */}
+                    <Card.Cover source={{ uri: 'https://picsum.photos/id/1011/700' }} />
+                    <Card.Actions>
+                        <Button onPress={() => console.log("press cancel")}>Cancel</Button>
+                        <Button onPress={() => console.log("press ok")}>Ok</Button>
+                    </Card.Actions>
+                </Card>
+            </View>
         </SafeAreaView>
     );
 }

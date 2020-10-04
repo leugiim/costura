@@ -1,5 +1,5 @@
 
-export interface User {
+export type User = {
     Id: number;
     Name: string;
     LastName: string;
@@ -7,7 +7,7 @@ export interface User {
     Image: string;    
 }
 
-export interface UsersStoreInterface {
+export type UsersStoreInterface = {
     isLoading: boolean;
     user?: User;
     getUser: (userId: string | number) => void;
