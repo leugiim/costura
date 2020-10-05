@@ -4,7 +4,6 @@ import { Text } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import { Avatar, Button, Card, Title, Paragraph, Appbar } from 'react-native-paper';
 import Home from "./views/Home"
 import About from "./views/About"
 

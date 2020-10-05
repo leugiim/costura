@@ -1,24 +1,29 @@
 import 'react-native-gesture-handler';
 import React from 'react';
-import { Text } from 'react-native'
+import { Text, View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Appbar, Button } from 'react-native-paper';
+import { useDrawerMenuStore } from "./../stores"
+import styles from "./../styles"
+import DrawerMenu from "./../components/DrawerMenu"
 
 
 export default function About ({ navigation }) {
-    const _handleMore = () => console.log('Shown more');
+    const toggleMenu = useDrawerMenuStore(store => store.toggleMenu);
+
     return (
         <SafeAreaView>
-            <div style={{marginBottom: "30px"}}>
+            <DrawerMenu {...navigation}></DrawerMenu>
+            <View style={styles.mb_3}>
                 <Appbar.Header>
                     <Appbar.BackAction onPress={() => navigation.navigate('Home')} />
                     <Appbar.Content title="About" subtitle="About Subtitle" />
-                    <Appbar.Action icon="dots-vertical" onPress={_handleMore} />
+                    <Appbar.Action icon="menu" onPress={toggleMenu} />
                 </Appbar.Header>
-            </div>
-            <div style={{margin: "0 20px"}}>
+            </View>
+            <View style={[styles.mx_4]}>
                 <Text>About </Text>
-            </div>
+            </View>
         </SafeAreaView>
     );
 }

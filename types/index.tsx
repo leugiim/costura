@@ -12,3 +12,10 @@ export type UsersStoreInterface = {
     user?: User;
     getUser: (userId: string | number) => void;
 }
+
+export type DrawerMenuInterface = {
+    showDrawer: boolean;
+    toggleMenu: () => void;
+    active: string;
+    setActive: (value: string) => void;
+}
