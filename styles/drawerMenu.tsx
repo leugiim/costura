@@ -27,7 +27,6 @@ const css = {
         width: "60vw",
         background: "#ffffff"
     }
-
 };
 
 export default css;

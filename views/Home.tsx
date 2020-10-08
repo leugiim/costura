@@ -1,50 +1,44 @@
 import 'react-native-gesture-handler';
-import React, { useEffect } from 'react';
-import { Text, View, TouchableOpacity  } from 'react-native'
+import React from 'react';
+import { Text, View  } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Appbar, Button, Card, Title, Paragraph, Avatar, Drawer } from 'react-native-paper';
-import { useUsersStore, useDrawerMenuStore } from "./../stores"
+import { Appbar, BottomNavigation } from 'react-native-paper';
 import styles from "./../styles"
-import DrawerMenu from "./../components/DrawerMenu"
 
+import Cuadrada from "./Cuadrada"
+import Redonda from "./Redonda"
+const EmptyRoute = () => <></>;
 
 export default function Home({ navigation }) {
-    const user = useUsersStore(store => store.user);
-    const getUser = useUsersStore(store => store.getUser);
-    const toggleMenu = useDrawerMenuStore(store => store.toggleMenu);
+    const [index, setIndex] = React.useState(0);
+    const [routes] = React.useState([
+        { key: 'cuadrada', title: 'Enagüilla cuadrada', icon: 'square' },
+        { key: 'redonda', title: 'Enagüilla redonda', icon: 'checkbox-blank-circle' },
+        { key: 'colcha', title: 'Colcha', icon: 'bed-empty' },
+    ]);
 
-
-    useEffect(() => {
-        (async function () {
-            await getUser(1);
-        })();
-    }, []);
+    const renderScene = BottomNavigation.SceneMap({
+        cuadrada: EmptyRoute,
+        redonda: EmptyRoute,
+        colcha: EmptyRoute,
+    });
 
     return (
-        <SafeAreaView>
-            <DrawerMenu {...navigation}></DrawerMenu>
+        <SafeAreaView style={styles.body}>
+            <Appbar.Header>
+                <Appbar.Content title="Calcula los metros de tela" />
+            </Appbar.Header>
 
-            <View style={styles.mb_3}>
-                <Appbar.Header>
-                    <Appbar.Content title="Home" subtitle="Home Subtitle" />
-                    <Appbar.Action icon="information" onPress={() => navigation.navigate('About')}></Appbar.Action>
-                    <Appbar.Action icon="menu" onPress={toggleMenu} />                    
-                </Appbar.Header>
-            </View>
+            { (index === 0) && <Cuadrada {...navigation} /> }
+            { (index === 1) && <Redonda {...navigation} /> }
+            { (index === 2) && <Cuadrada {...navigation} /> }
 
-            <View style={[styles.mx_4]}>
-                <Button icon="home" mode="contained" onPress={() => navigation.navigate('About')}>About</Button>
-
-                <Card style={styles.mt_4}>
-                    {(user) && <Card.Title title={user?.Name} subtitle={user?.LastName} left={(props) => <Avatar.Image {...props} size={48} source={{ uri: user?.Image }} />} />}
-                    <Card.Cover source={{ uri: 'https://picsum.photos/id/1011/700' }} />
-                    <Card.Actions>
-                        <Button onPress={() => console.log("press cancel")}>Cancel</Button>
-                        <Button onPress={() => console.log("press ok")}>Ok</Button>
-                    </Card.Actions>
-                </Card>
-            </View>
-
+            <BottomNavigation style={styles.bottomNavigation}
+                shifting={true}
+                navigationState={{ index, routes }} 
+                onIndexChange={setIndex}
+                renderScene={renderScene}
+            />
             
         </SafeAreaView>
     );
